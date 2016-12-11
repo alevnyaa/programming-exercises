@@ -3,15 +3,13 @@
 def maxSequence(arr):
     if not arr:
         return 0
-    sums = []
-    length = len(arr)
-    for i in range(length):
-        value = 0
-        j = i
-        while (j < length):
-            value = value + arr[j]
-            sums.append(value)
-            j = j + 1
-    return max(sums)
+    ans = curr = 0
+    for x in arr:
+        curr += x
+        if curr<0:
+            curr = 0
+        elif curr > ans:
+            ans = curr
+    return ans 
 
 print(maxSequence([1,2,3,4,-12,5,11]))
