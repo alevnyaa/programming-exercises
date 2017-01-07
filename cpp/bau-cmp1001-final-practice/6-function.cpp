@@ -22,7 +22,4 @@ int main(){
   printMultiples(3, 12, 19);
   cout << "Testing for 7, 48, 71." << endl;
   printMultiples(7, 48, 71);
-
-
-
 }
