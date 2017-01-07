@@ -3,27 +3,25 @@
 
 #include <iostream>
 using namespace std;
-/*
-int howMany(char[] word, char ch){
+
+int howMany(char w[], char ch){
   int count = 0;
   for(int i=0; i<10; i++){
-    if(word[i] == ch){
+    if(w[i] == ch){
       count++;
     }
   }
   return count;
 }
-*/
+
 int main(){
-  char word[10];
+  char w[10];
+  cout << "Input 10 characters, pressing enter after each character." << endl;
   for(int i=0; i<10; i++){
-    char ch;
-    cin >> ch;
-    word[i] = ch;
+    cin >> w[i];
   }
-  cout << endl;
-  for(int i=0; i<10; i++){
-    cout >> word[i];
-  }
-  //cout << howMany(word, 'a');
+  char ch;
+  cout << "Input a character to count how many of those exist in the array." << endl;
+  cin >> ch; 
+  cout << howMany(w, ch) << endl;
 }
