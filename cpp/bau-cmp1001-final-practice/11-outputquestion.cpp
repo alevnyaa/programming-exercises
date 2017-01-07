@@ -14,7 +14,7 @@ int main()
             a[i] = 3 * ( i+1 );
     for(i = 0; i < 10; i++)
     {
-        cout << a[i] << “\t”;
+        cout << a[i] << "\t";
         if(i % 3 == 0)
             cout << endl;
     }
