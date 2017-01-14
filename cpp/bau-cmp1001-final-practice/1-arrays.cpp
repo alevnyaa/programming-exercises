@@ -5,6 +5,7 @@
 using namespace std;
 
 int main(){
+  cout << "Input 10 numbers to be reversed." << endl;
   double num[10];
   cout << "Input:" << endl;
   for(int i=0; i<10; i++){
