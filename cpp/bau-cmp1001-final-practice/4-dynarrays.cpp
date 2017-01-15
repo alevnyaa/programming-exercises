@@ -5,14 +5,13 @@
 #include <iostream>
 using namespace std;
 
-int* addToArray(int* arrin, int num){
-  int len = sizeof(arrin)/sizeof(arrin[0]);
-  int* arrout = new int[len+1];
-  for(int i=0; i<len; i++){
+int* addToArray(int* arrin, int num, int arrsize){
+  int* arrout = new int[arrsize+1];
+  for(int i=0; i<arrsize; i++){
     arrout[i] = arrin[i];
   }
   delete[] arrin;
-  arrout[len] = num;
+  arrout[arrsize] = num;
   return arrout;
 }
 
@@ -21,8 +20,10 @@ int main(){
   cout << "Input invoices, and end with the number 0." << endl;
   cin >> nums[0];
   int num = 1;
+  int arrsize = 1;
   while (num != 0){
-    nums = addToArray(nums, num); 
+    arrsize++;
+    nums = addToArray(nums, num, arrsize); 
     cin >> num;
   }
   int len = sizeof(nums)/sizeof(nums[0]);
