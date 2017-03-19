@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 import sys
 
-from fractions import gcd
 from random import randint
-from math import sqrt
+from math import gcd, sqrt
 
 if len(sys.argv) == 3:
     trials = int(sys.argv[1])
