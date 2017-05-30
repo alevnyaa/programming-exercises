@@ -91,3 +91,6 @@ ENV/
 # Custom
 *~
 *.out
+*.swp
+node_modules/
+*.tmp
