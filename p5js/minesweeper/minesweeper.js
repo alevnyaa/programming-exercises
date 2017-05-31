@@ -3,8 +3,13 @@ var SETTINGS = {
   GRID_Y: 10,
   CANVAS_X: 400,
   CANVAS_Y: 400,
-  CELL_SIZE: this.CANVAS_X/this.GRID_X,
+  CELL_SIZE: function(){
+    return SETTINGS.CANVAS_X / SETTINGS.GRID_X;
+  },
   DRAW_PER: 0.9,
+  DRAW_SIZE: function(){
+    return SETTINGS.CELL_SIZE() * SETTINGS.DRAW_PER;
+  },
   MINE_PER: 0.15
 };
 
@@ -16,11 +21,6 @@ var PALETTE = {
   LIGHTEST: "#a94646"
 };
 
-var CELLTYPES = {
-  EMPTY: 0,
-  MINE: -1
-};
-
 var BOARD = (function() {
   //initialize empty 2d grid array
   this.grid = new Array(SETTINGS.GRID_X);
@@ -28,69 +28,128 @@ var BOARD = (function() {
     this.grid[i] = new Array(SETTINGS.GRID_Y);
   }
   
-  //call every cycle to iterate and draw cells
-  //rectmode should be set to center before this
-  this.draw = function(){
-    rect(50, 50, 50, 50);
-    alert("HEY I'M THE BOARD"); 
-    //iterate grid and call draw
-    for(i = 0; i < SETTINGS.GRID_X; i++){
-      for(j = 0; j < SETTINGS.GRID_Y; j++){
-	//set position
-	//x = 
-	//y =
-	drawSize = SETTINGS.CELL_SIZE * SETTINGS.DRAW_PER;
-	//rect(x, y, drawSize, drawSize);
-      }
-    }
-  };
-
   //randomize whole grid and start over
   this.randomize = function(){
     for(i = 0; i < SETTINGS.GRID_X; i++){
       for(j = 0; j < SETTINGS.GRID_Y; j++){
-	this.grid[i][j] = new cell(1,1,0);
+        inside = 0;
+        if(Math.random() < SETTINGS.MINE_PER){
+          inside = -1;
+        }
+        this.grid[i][j] = new cell(i, j, inside);
       }
     }
   };
 
+  //counts number of mines adjacent to cells 
+  this.count = function(){
+    //check for all 8 adjacent
+    //if cells is mine, skip
+    for(i = 0; i < SETTINGS.GRID_X; i++){
+      for(j = 0; j < SETTINGS.GRID_Y; j++){
+        //if is not a mine
+        if(this.grid[i][j].inside > -1){
+          //start count
+          this.grid[i][j].inside = 0;
+          //n j-1
+          if(j > 0){
+            if(this.grid[i][j-1].inside === -1){
+              this.grid[i][j].inside++;
+            }
+          }
+          //s j+1
+          if(j < SETTINGS.GRID_Y - 2){
+            if(this.grid[i][j+1].inside === -1){
+              this.grid[i][j].inside++;
+            }
+          }
+          //w i-1
+          if(i > 0){
+            if(this.grid[i-1][j].inside === -1){
+              this.grid[i][j].inside++;
+            }
+          }
+          //e i+1
+          if(i < SETTINGS.GRID_X - 2){
+            if(this.grid[i+1][j].inside === -1){
+              this.grid[i][j].inside++;
+            }
+          }
+          //ne i+1 j-1
+          if(i < SETTINGS.GRID_X - 2 && j > 0){
+            if(this.grid[i+1][j-1].inside === -1){
+              this.grid[i][j].inside++;
+            }
+          }
+          //sw i-1 j+1
+          if(i > 0 && j < SETTINGS.GRID_Y - 2){
+            if(this.grid[i-1][j+1].inside === -1){
+              this.grid[i][j].inside++;
+            }
+          }
+          //nw i-1 j-1
+          if(i > 0 && j > 0){
+            if(this.grid[i-1][j-1].inside === -1){
+              this.grid[i][j].inside++;
+            }
+          }
+          //se i+1 j+1
+          if(i < SETTINGS.GRID_X - 2 && j < SETTINGS.GRID_Y - 2){
+            if(this.grid[i+1][j+1].inside === -1){
+              this.grid[i][j].inside++;
+            }
+          }
+        }else{
+          this.grid[i][j].inside = -1; 
+        }
+      }
+    }
+  };
+  
   return {
     "grid": this.grid,
-    "randomize": this.randomize()
+    "randomize": this.randomize,
+    "count": this.count,
   };
 })();
 
 function cell(x, y, inside) {
-  this.pos = {
+  this.inside = inside;
+  //0 is hidden, 1 is revealed, 2 is flagged
+  this.state = 0;
+  this.position = {
     x: x,
     y: y
   };
-
-  this.inside = inside;
-
-  this.revealed = false;
-
-  this.drawVal = function(){
-    return{
-    
-    }
+  this.center = {
+    x: (0.5 + x) * SETTINGS.CELL_SIZE(),
+    y: (0.5 + y) * SETTINGS.CELL_SIZE()
   };
 }
 
 function setup(){
   createCanvas(SETTINGS.CANVAS_X, SETTINGS.CANVAS_Y);
   background(PALETTE.DARKER);
+  BOARD.randomize();
+  BOARD.count();
 }
 
 function mousePressed(){
-  // handle input
+  //handle input
+  //set to 1 on click
+  //set to 2 on right click
 }
 
 function draw(){
-  rect(30, 30, 30, 30);
-  for(c in BOARD.drawVal()){
-     
+  rectMode(CENTER);
+  for(i = 0; i < SETTINGS.GRID_X; i++){
+    for(j = 0; j < SETTINGS.GRID_Y; j++){
+      rect(
+        BOARD.grid[i][j].center.x,
+        BOARD.grid[i][j].center.y,
+        SETTINGS.DRAW_SIZE(),
+        SETTINGS.DRAW_SIZE()
+      );
+    }
   }
-  //rectMode(CENTER);
-  //BOARD.draw();
 }
