@@ -128,7 +128,7 @@ function cell(x, y, inside) {
 }
 
 function setup(){
-  createCanvas(SETTINGS.CANVAS_X, SETTINGS.CANVAS_Y);
+  createCanvas(SETTINGS.CANVAS_X+1, SETTINGS.CANVAS_Y+1);
   background(PALETTE.DARKER);
   BOARD.randomize();
   BOARD.count();
@@ -138,6 +138,18 @@ function mousePressed(){
   //handle input
   //set to 1 on click
   //set to 2 on right click
+  cell_size = SETTINGS.CELL_SIZE();
+  outline_size = (cell_size - SETTINGS.DRAW_SIZE()) / 2;
+  on_button = false;
+  if(mouseX % cell_size < cell_size - outline_size
+      && mouseX % cell_size > outline_size
+      && mouseY % cell_size < cell_size - outline_size
+      && mouseY % cell_size > outline_size){
+    on_button = true;
+    pos_x = Math.floor(mouseX / SETTINGS.CELL_SIZE());
+    pos_y = Math.floor(mouseY / SETTINGS.CELL_SIZE());
+    BOARD.grid[pos_x][pos_y].state = 1;
+  }
 }
 
 function draw(){
