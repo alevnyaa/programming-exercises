@@ -94,3 +94,4 @@ ENV/
 *.swp
 node_modules/
 *.tmp
+assembly/bin/
