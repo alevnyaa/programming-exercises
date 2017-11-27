@@ -1,7 +1,7 @@
 .text
-    .global _start
+    .global main
 
-_start:
+main:
 
     movl    $len,%edx
     movl    $msg,%ecx

@@ -1,18 +1,23 @@
 .PHONY: clean
 
-all: bin/hello bin/clearscreen bin/sieve
+all: directories bin/hello bin/clearscreen bin/sieve
+
+directories:
+	mkdir -p bin
+
+# needs things like printf linked
+# bin/sieve: src/sieve.S
+# 	as -o build/sieve.o src/sieve.S
+# 	ld -s -o bin/sieve build/sieve.o
 
 bin/hello: src/hello.S
-	as -o build/hello.o src/hello.S
-	ld -s -o bin/hello build/hello.o
+	gcc -o bin/hello src/hello.S -no-pie
 
 bin/clearscreen: src/clearscreen.S
-	as -o build/clearscreen.o src/clearscreen.S
-	ld -s -o bin/clearscreen build/clearscreen.o
+	gcc -o bin/clearscreen src/clearscreen.S -no-pie
 
 bin/sieve: src/sieve.S
-	as -o build/sieve.o src/sieve.S
-	ld -s -o bin/sieve build/sieve.o
+	gcc -o bin/sieve src/sieve.S -no-pie
 
 clean:
-	rm -rf bin build
+	rm -rf bin
